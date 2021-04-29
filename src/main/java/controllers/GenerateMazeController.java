@@ -30,7 +30,7 @@ public class GenerateMazeController {
     private void generateMaze() {
 
         graphicsContext = mazeCanvas.getGraphicsContext2D();
-        maze = new Maze((int)mazeCanvas.getWidth(), (int)mazeCanvas.getHeight(), 50);
+        maze = new Maze((int)mazeCanvas.getWidth(), (int)mazeCanvas.getHeight(), 100);
 
         initMaze();
         iterateMaze(3, 1);
@@ -59,18 +59,17 @@ public class GenerateMazeController {
         cellsStack.add(current);
         maze.setVisitedCell(current);
 
-
-        while (maze.existsUnvisitedCells()){
+        while (!cellsStack.isEmpty()){
             Coordinate unvisitedNeighbour = maze.getRandomUnvisitedNeighbour(current);
             if (unvisitedNeighbour != null){
-                cellsStack.add(unvisitedNeighbour);
+                cellsStack.add(current);
                 removeWallBetween(current.x, current.y, unvisitedNeighbour.x, unvisitedNeighbour.y);
                 current = unvisitedNeighbour;
                 maze.setVisitedCell(current);
             }
             else{
-                cellsStack.remove(cellsStack.size()-1);
                 current = cellsStack.get(cellsStack.size()-1);
+                cellsStack.remove(cellsStack.size()-1);
             }
         }
     }
