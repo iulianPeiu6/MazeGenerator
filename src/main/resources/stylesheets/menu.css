@@ -3,3 +3,7 @@
     -fx-font-family: sans-serif;
     -fx-background-color: #ffffff;
 }
+
+.menuPane {
+    -float: right;
+}

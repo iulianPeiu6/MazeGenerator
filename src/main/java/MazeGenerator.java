@@ -1,11 +1,6 @@
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.io.IOException;
+import scenes.MenuStage;
 
 public class MazeGenerator extends Application {
 
@@ -15,15 +10,11 @@ public class MazeGenerator extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource("layouts\\menu.fxml"));
-            root.getStylesheets().add(getClass().getResource("stylesheets\\menu.css").toExternalForm());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene initialScene = new Scene(root);
-        primaryStage.setScene(initialScene);
+        primaryStage.setScene(MenuStage.getScene());
+        primaryStage.setTitle("Menu");
+        primaryStage.setMaximized(true);
+
+
         primaryStage.show();
     }
 }
