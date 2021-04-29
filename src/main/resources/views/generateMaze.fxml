@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<Scene onContextMenuRequested="#setUpCanvas" onKeyPressed="#generateMaze" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
+<Scene onKeyPressed="#generateMaze" stylesheets="@../stylesheets/generateMaze.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
     <AnchorPane prefHeight="200" prefWidth="200">
       <children>
          <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-               <Canvas fx:id="mazeCanvas" height="600.0" width="800.0" BorderPane.alignment="CENTER" />
+               <Canvas fx:id="mazeCanvas" height="600.0" opacity="0.8" width="800.0" BorderPane.alignment="CENTER" />
             </center>
             <top>
-               <Label text="Press 'g' key to generate a randommaze" BorderPane.alignment="BOTTOM_CENTER" />
+               <Label text="Press 'g' key to generate a random maze" BorderPane.alignment="BOTTOM_CENTER" />
             </top>
          </BorderPane>
       </children></AnchorPane>

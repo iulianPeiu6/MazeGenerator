@@ -7,21 +7,24 @@ import java.util.List;
 public class Cell {
     public List<Boolean> walls;
 
+    public Boolean visited;
+
     public Cell() {
         this.walls = Arrays.asList(true, true, true, true);
+        this.visited = false;
     }
 
-    public void removeWall(String wall) throws IOException {
-        int wallIndex = getindexWall(wall);
+    public void removeWall(String wall) {
+        int wallIndex = getIndexWall(wall);
         walls.set(wallIndex, false);
     }
 
-    public Boolean wallExists(String wall) throws IOException {
-        int wallIndex = getindexWall(wall);
+    public Boolean wallExists(String wall) {
+        int wallIndex = getIndexWall(wall);
         return walls.get(wallIndex);
     }
 
-    private int getindexWall(String wall) throws IOException {
+    private int getIndexWall(String wall) {
         if (wall.equals("top"))
             return 0;
         if (wall.equals("right"))
@@ -30,6 +33,11 @@ public class Cell {
             return 2;
         if (wall.equals("left"))
             return 3;
-        throw new IOException();
+        System.out.println("???");
+        return 0;
+    }
+
+    public void setVisited() {
+        visited = true;
     }
 }
