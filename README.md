@@ -1,1 +1,1 @@
-# MazeGenerator
+# MazeGeneratorApp

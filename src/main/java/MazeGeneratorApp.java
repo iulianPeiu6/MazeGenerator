@@ -2,7 +2,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import scenes.MenuStage;
 
-public class MazeGenerator extends Application {
+public class MazeGeneratorApp extends Application {
 
     public static void main(String[] args) {
         launch(args);

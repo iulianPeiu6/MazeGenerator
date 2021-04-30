@@ -1,8 +1,12 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -18,23 +22,24 @@ public class GenerateMazeController {
     private Canvas mazeCanvas;
 
     @FXML
-    void generateMaze(KeyEvent event) {
-        if (event.getCode().getChar().charAt(0) == 'G')
-            generateMaze();
+    private TextField cellDimensionTextArea;
+
+    public GenerateMazeController() {
+
     }
 
     private Maze maze;
     private double lineWidth = 2.5;
     private GraphicsContext graphicsContext;
 
-    private void generateMaze() {
-
+    @FXML
+    void generateMaze(ActionEvent event) {
         graphicsContext = mazeCanvas.getGraphicsContext2D();
-        maze = new Maze((int)mazeCanvas.getWidth(), (int)mazeCanvas.getHeight(), 100);
+        int cellDimension = Integer.parseInt(cellDimensionTextArea.getText());
+        maze = new Maze((int)mazeCanvas.getWidth(), (int)mazeCanvas.getHeight(), cellDimension);
 
         initMaze();
         iterateMaze(3, 1);
-
     }
 
     private void initMaze() {
