@@ -1,17 +1,26 @@
 package models;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Cell {
     public List<Boolean> walls;
 
-    public Boolean visited;
+    private Boolean visited;
+
+    private Boolean finished;
 
     public Cell() {
         this.walls = Arrays.asList(true, true, true, true);
         this.visited = false;
+        this.finished = false;
+    }
+
+    public Cell(Cell cell) {
+        this.walls = new ArrayList<>(cell.walls);
+        this.visited = Boolean.valueOf(cell.visited);
+        this.finished = Boolean.valueOf(cell.finished);
     }
 
     public void removeWall(String wall) {
@@ -37,7 +46,19 @@ public class Cell {
         return 0;
     }
 
+    public Boolean isVisited() {
+        return visited;
+    }
+
     public void setVisited() {
         visited = true;
+    }
+
+    public Boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished() {
+        this.finished = true;
     }
 }

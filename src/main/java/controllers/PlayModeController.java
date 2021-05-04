@@ -2,11 +2,9 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import scenes.MenuScene;
-import scenes.PlayModeScene;
 
 public class PlayModeController {
 
