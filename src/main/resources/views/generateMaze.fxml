@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<Scene onKeyPressed="#generateMaze" stylesheets="@../stylesheets/generateMaze.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
+<Scene stylesheets="@../stylesheets/generateMaze.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
     <AnchorPane prefHeight="200" prefWidth="200">
       <children>
          <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -18,7 +18,7 @@
             <bottom>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
-                     <Button alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" text="Generate">
+                     <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" text="Generate">
                         <graphic>
                            <TextField fx:id="cellDimensionTextArea" promptText="cell dimension" />
                         </graphic>
