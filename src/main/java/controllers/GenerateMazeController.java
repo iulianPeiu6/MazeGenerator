@@ -16,6 +16,7 @@ import models.Maze;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GenerateMazeController {
 
@@ -31,28 +32,21 @@ public class GenerateMazeController {
     private Maze maze;
     private GraphicsContext graphicsContext;
     private double lineWidth;
+    AtomicBoolean wasRun = new AtomicBoolean(false);
 
     public GenerateMazeController() {
         this.lineWidth = 5;
     }
-
     @FXML
-    public void initialize() {
-        generateButton.setOnMouseClicked((EventHandler<Event>) arg0 -> {
-            generateMaze();
-        });
+    public void initialize(){
+        graphicsContext = mazeCanvas.getGraphicsContext2D();
     }
 
-    private void generateMaze() {
-        graphicsContext = mazeCanvas.getGraphicsContext2D();
-        int cellDimension;
-        try {
-            cellDimension = Integer.parseInt(cellDimensionTextArea.getText());
-        } catch (NumberFormatException e) {
-            cellDimension = 100;
-        }
-
-        maze = new Maze((int) mazeCanvas.getWidth(), (int) mazeCanvas.getHeight(), cellDimension);
+    @FXML
+    private synchronized void generateMaze() {
+        if (wasRun.getAndSet(true))
+            return;
+        maze = new Maze((int) mazeCanvas.getWidth(), (int) mazeCanvas.getHeight(), getCellDimension());
         maze.setStart(new Coordinate((int) (Math.random() * maze.width), (int) (Math.random() * maze.height)));
 
         List<Coordinate> cellsStack = new ArrayList<>();
@@ -81,6 +75,16 @@ public class GenerateMazeController {
             });
             pauseTransition.play();
         }
+    }
+
+    private int getCellDimension() {
+        int cellDimension;
+        try {
+            cellDimension = Integer.parseInt(cellDimensionTextArea.getText());
+        } catch (NumberFormatException e) {
+            cellDimension = 100;
+        }
+        return cellDimension;
     }
 
     private void drawMaze(Maze maze) {

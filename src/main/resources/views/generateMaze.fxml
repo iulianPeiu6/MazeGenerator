@@ -18,7 +18,7 @@
             <bottom>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
-                     <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" text="Generate">
+                     <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" text="Generate">
                         <graphic>
                            <TextField fx:id="cellDimensionTextArea" promptText="cell dimension" />
                         </graphic>
