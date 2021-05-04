@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Scene stylesheets="@../stylesheets/playMode.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayModeController">
+    <AnchorPane prefHeight="587.0" prefWidth="611.0">
+      <children>
+         <BorderPane prefHeight="200.0" prefWidth="432.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" BorderPane.alignment="CENTER">
+                  <children>
+                     <Button fx:id="classicModeButton" mnemonicParsing="false" text="Classic">
+                        <font>
+                           <Font name="System Bold" size="48.0" />
+                        </font></Button>
+                     <Button fx:id="combatModeButton" mnemonicParsing="false" text="Combat">
+                        <font>
+                           <Font name="System Bold" size="48.0" />
+                        </font></Button>
+                     <Button fx:id="timerModeButton" mnemonicParsing="false" text="Timer">
+                        <font>
+                           <Font name="System Bold" size="48.0" />
+                        </font></Button>
+                     <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back">
+                        <font>
+                           <Font name="System Bold" size="48.0" />
+                        </font></Button>
+                  </children>
+               </VBox>
+            </center>
+         </BorderPane>
+      </children></AnchorPane>
+</Scene>

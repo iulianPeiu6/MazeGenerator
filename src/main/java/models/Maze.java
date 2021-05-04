@@ -11,6 +11,8 @@ public class Maze {
 
     public Cell[][] cells;
 
+    private Coordinate start;
+
     public Maze(int width, int height, int cellDimension) {
         this.width = width/cellDimension-1;
         this.height = height/cellDimension-1;
@@ -64,5 +66,13 @@ public class Maze {
         if (x>width || y>height)
             return false;
         return true;
+    }
+
+    public Coordinate getStart() {
+        return start;
+    }
+
+    public void setStart(Coordinate start) {
+        this.start = start;
     }
 }

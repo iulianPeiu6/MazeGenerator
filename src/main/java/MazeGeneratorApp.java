@@ -1,6 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import scenes.MenuStage;
+import scenes.MenuScene;
 
 public class MazeGeneratorApp extends Application {
 
@@ -10,7 +10,7 @@ public class MazeGeneratorApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setScene(MenuStage.getScene());
+        primaryStage.setScene(MenuScene.getScene());
         primaryStage.setTitle("Menu");
         primaryStage.setMaximized(true);
 

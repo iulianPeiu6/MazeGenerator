@@ -5,11 +5,11 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 
-public class MenuStage {
+public class MenuScene {
 
     private static Scene menuScene = null;
 
-    private MenuStage() {
+    private MenuScene() {
         menuScene = null;
 
         try {
@@ -21,7 +21,7 @@ public class MenuStage {
 
     public static Scene getScene(){
         if (menuScene == null)
-            new MenuStage();
+            new MenuScene();
 
         return menuScene;
     }
