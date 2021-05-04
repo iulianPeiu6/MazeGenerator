@@ -28,7 +28,7 @@ public class MenuController {
     @FXML
     public void generateButtonPressed(ActionEvent event) {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
-        currentStage.hide();
+        currentStage.close();
 
         Stage generateMazeStage = new Stage();
         generateMazeStage.setMaximized(true);
