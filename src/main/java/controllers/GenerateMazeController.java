@@ -1,18 +1,19 @@
 package controllers;
 
 import javafx.animation.PauseTransition;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Cell;
 import models.Coordinate;
 import models.Maze;
+import scenes.MenuScene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,12 @@ public class GenerateMazeController {
     @FXML
     private TextField cellDimensionTextArea;
 
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button saveButton;
+
     private Maze maze;
     private GraphicsContext graphicsContext;
     private double lineWidth;
@@ -40,6 +47,23 @@ public class GenerateMazeController {
     @FXML
     public void initialize(){
         graphicsContext = mazeCanvas.getGraphicsContext2D();
+    }
+
+    @FXML
+    public void back(ActionEvent event) {
+        Stage currentStage = (Stage) backButton.getScene().getWindow();
+        currentStage.close();
+
+        Stage menuStage = new Stage();
+        menuStage.setMaximized(true);
+        menuStage.setTitle("Main Menu");
+        menuStage.setScene(MenuScene.getScene());
+        menuStage.show();
+    }
+
+    @FXML
+    public void save(ActionEvent event) {
+        //TODO
     }
 
     @FXML
