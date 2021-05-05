@@ -52,7 +52,7 @@ public class GenerateMazeController {
     @FXML
     public void back(ActionEvent event) {
         Stage currentStage = (Stage) backButton.getScene().getWindow();
-        currentStage.close();
+        currentStage.hide();
 
         Stage menuStage = new Stage();
         menuStage.setMaximized(true);
@@ -85,20 +85,24 @@ public class GenerateMazeController {
                 cellsStack.add(current);
                 removeWallBetween(current.x, current.y, unvisitedNeighbour.x, unvisitedNeighbour.y);
                 current = unvisitedNeighbour;
+                maze.setCurrent(current);
                 maze.setVisitedCell(current);
             } else {
                 maze.cells[current.x][current.y].setFinished();
                 current = cellsStack.get(cellsStack.size() - 1);
+                maze.setCurrent(current);
                 cellsStack.remove(cellsStack.size() - 1);
             }
 
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime += 0.125));
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime += 0.0625));
             Maze finalMaze = new Maze(maze);
-            pauseTransition.setOnFinished((event) -> {
-                drawMaze(finalMaze);
-            });
+            pauseTransition.setOnFinished(event -> drawMaze(finalMaze));
             pauseTransition.play();
         }
+
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime));
+        pauseTransition.setOnFinished(event -> wasRun.set(false));
+        pauseTransition.play();
     }
 
     private int getCellDimension() {
@@ -114,8 +118,13 @@ public class GenerateMazeController {
     private void drawMaze(Maze maze) {
         drawMazeSkeleton(maze);
         for (int i = 0; i < maze.width; i++)
-            for (int j = 0; j < maze.height; j++)
+            for (int j = 0; j < maze.height; j++){
+                if (maze.getCurrent().x == i && maze.getCurrent().y == j)
+                    onCurrent = true;
+                else
+                    onCurrent = false;
                 drawCell(maze.cells[i][j], new Coordinate(i, j));
+            }
     }
 
     private void drawMazeSkeleton(Maze maze) {
@@ -166,8 +175,12 @@ public class GenerateMazeController {
                 maze.cellDimension - 5);
     }
 
+    private Boolean onCurrent = false;
+
     private void setProperCellFillColor(Cell cell) {
-        if (cell.isFinished())
+        if (onCurrent)
+            graphicsContext.setFill(Color.valueOf("#cafa8c"));
+        else if (cell.isFinished())
             graphicsContext.setFill(Color.valueOf("#5ee2a7"));
         else if (cell.isVisited()) {
             graphicsContext.setFill(Color.valueOf("#e2a65e"));

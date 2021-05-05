@@ -88,4 +88,12 @@ public class Maze {
         this.start = new Coordinate(start);
         this.current = new Coordinate(start);
     }
+
+    public Coordinate getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Coordinate current) {
+        this.current = current;
+    }
 }
