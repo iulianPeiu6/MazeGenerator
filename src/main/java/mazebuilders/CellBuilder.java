@@ -1,26 +1,26 @@
-package models;
+package mazebuilders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Cell {
+public class CellBuilder {
     public List<Boolean> walls;
 
     private Boolean visited;
 
     private Boolean finished;
 
-    public Cell() {
+    public CellBuilder() {
         this.walls = Arrays.asList(true, true, true, true);
         this.visited = false;
         this.finished = false;
     }
 
-    public Cell(Cell cell) {
-        this.walls = new ArrayList<>(cell.walls);
-        this.visited = Boolean.valueOf(cell.visited);
-        this.finished = Boolean.valueOf(cell.finished);
+    public CellBuilder(CellBuilder cellBuilder) {
+        this.walls = new ArrayList<>(cellBuilder.walls);
+        this.visited = Boolean.valueOf(cellBuilder.visited);
+        this.finished = Boolean.valueOf(cellBuilder.finished);
     }
 
     public void removeWall(String wall) {
@@ -61,4 +61,6 @@ public class Cell {
     public void setFinished() {
         this.finished = true;
     }
+
+
 }
