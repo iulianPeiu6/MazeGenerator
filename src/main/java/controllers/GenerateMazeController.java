@@ -1,5 +1,6 @@
 package controllers;
 
+import jakarta.xml.bind.JAXBContext;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,11 +11,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import models.Cell;
-import models.Coordinate;
-import models.Maze;
+import mazebuilders.CellBuilder;
+import mazebuilders.CoordinateBuilder;
+import mazebuilders.MazeBuilder;
 import scenes.MenuScene;
+import xmlmodels.Cell;
+import xmlmodels.Coordinate;
+import xmlmodels.Maze;
+import xmlmodels.Walls;
 
+import javax.xml.bind.Marshaller;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,13 +43,15 @@ public class GenerateMazeController {
     @FXML
     private Button saveButton;
 
-    private Maze maze;
+    private MazeBuilder mazeBuilder;
     private GraphicsContext graphicsContext;
     private double lineWidth;
-    AtomicBoolean wasRun = new AtomicBoolean(false);
+    AtomicBoolean wasRun;
 
     public GenerateMazeController() {
         this.lineWidth = 5;
+        mazeBuilder = null;
+        wasRun = new AtomicBoolean(false);
     }
     @FXML
     public void initialize(){
@@ -63,40 +72,65 @@ public class GenerateMazeController {
 
     @FXML
     public void save(ActionEvent event) {
-        //TODO
+        if (mazeBuilder == null)
+            return ;
+        JAXBContext jaxbContext = null;
+        try {
+            jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
+                    .createContext(new Class[]{Maze.class}, null);
+
+            var jaxbMarshaller = jaxbContext.createMarshaller();
+
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            int mazeId = getValidMazeId();
+            Maze maze = new Maze(mazeId,mazeBuilder);
+
+            jaxbMarshaller.marshal(maze, new File("src/main/resources/mazes/classic_" + mazeId + ".xml"));
+
+        } catch (jakarta.xml.bind.JAXBException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private int getValidMazeId() {
+        // TODO
+        return 1;
     }
 
     @FXML
     private synchronized void generateMaze() {
         if (wasRun.getAndSet(true))
             return;
-        maze = new Maze((int) mazeCanvas.getWidth(), (int) mazeCanvas.getHeight(), getCellDimension());
-        maze.setStart(new Coordinate((int) (Math.random() * maze.width), (int) (Math.random() * maze.height)));
+        mazeBuilder = new MazeBuilder((int) mazeCanvas.getWidth(), (int) mazeCanvas.getHeight(), getCellDimension());
+        mazeBuilder.setStart(new CoordinateBuilder((int) (Math.random() * mazeBuilder.getWidth()),
+                (int) (Math.random() * mazeBuilder.getHeight())));
 
-        List<Coordinate> cellsStack = new ArrayList<>();
-        Coordinate current = maze.getStart();
+        List<CoordinateBuilder> cellsStack = new ArrayList<>();
+        CoordinateBuilder current = mazeBuilder.getStart();
         cellsStack.add(current);
-        maze.setVisitedCell(current);
+        mazeBuilder.setVisitedCell(current);
         double pauseTime = 0;
 
         while (!cellsStack.isEmpty()) {
-            Coordinate unvisitedNeighbour = maze.getRandomUnvisitedNeighbour(current);
+            CoordinateBuilder unvisitedNeighbour = mazeBuilder.getRandomUnvisitedNeighbour(current);
             if (unvisitedNeighbour != null) {
                 cellsStack.add(current);
                 removeWallBetween(current.x, current.y, unvisitedNeighbour.x, unvisitedNeighbour.y);
                 current = unvisitedNeighbour;
-                maze.setCurrent(current);
-                maze.setVisitedCell(current);
+                mazeBuilder.setCurrent(current);
+                mazeBuilder.setVisitedCell(current);
             } else {
-                maze.cells[current.x][current.y].setFinished();
+                mazeBuilder.getCellBuilders()[current.x][current.y].setFinished();
                 current = cellsStack.get(cellsStack.size() - 1);
-                maze.setCurrent(current);
+                mazeBuilder.setCurrent(current);
                 cellsStack.remove(cellsStack.size() - 1);
             }
 
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime += 0.0625));
-            Maze finalMaze = new Maze(maze);
-            pauseTransition.setOnFinished(event -> drawMaze(finalMaze));
+            MazeBuilder finalMazeBuilder = new MazeBuilder(mazeBuilder);
+            pauseTransition.setOnFinished(event -> drawMaze(finalMazeBuilder));
             pauseTransition.play();
         }
 
@@ -115,84 +149,84 @@ public class GenerateMazeController {
         return cellDimension;
     }
 
-    private void drawMaze(Maze maze) {
-        drawMazeSkeleton(maze);
-        for (int i = 0; i < maze.width; i++)
-            for (int j = 0; j < maze.height; j++){
-                if (maze.getCurrent().x == i && maze.getCurrent().y == j)
+    private void drawMaze(MazeBuilder mazeBuilder) {
+        drawMazeSkeleton(mazeBuilder);
+        for (int i = 0; i < mazeBuilder.getWidth(); i++)
+            for (int j = 0; j < mazeBuilder.getHeight(); j++){
+                if (mazeBuilder.getCurrent().x == i && mazeBuilder.getCurrent().y == j)
                     onCurrent = true;
                 else
                     onCurrent = false;
-                drawCell(maze.cells[i][j], new Coordinate(i, j));
+                drawCell(mazeBuilder.getCellBuilders()[i][j], new CoordinateBuilder(i, j));
             }
     }
 
-    private void drawMazeSkeleton(Maze maze) {
+    private void drawMazeSkeleton(MazeBuilder mazeBuilder) {
         graphicsContext.setFill(Color.valueOf("#2f8daf"));
         graphicsContext.setLineWidth(lineWidth);
         graphicsContext.fillRect(0, 0, mazeCanvas.getWidth(), mazeCanvas.getHeight());
 
-        for (int i = 0; i < maze.height; i++)
-            graphicsContext.strokeLine(0, i * maze.cellDimension,
-                    mazeCanvas.getWidth(), i * maze.cellDimension);
+        for (int i = 0; i < mazeBuilder.getHeight(); i++)
+            graphicsContext.strokeLine(0, i * mazeBuilder.getCellDimension(),
+                    mazeCanvas.getWidth(), i * mazeBuilder.getCellDimension());
 
-        for (int i = 0; i < maze.width; i++)
-            graphicsContext.strokeLine(i * maze.cellDimension, 0,
-                    i * maze.cellDimension, mazeCanvas.getHeight());
+        for (int i = 0; i < mazeBuilder.getWidth(); i++)
+            graphicsContext.strokeLine(i * mazeBuilder.getCellDimension(), 0,
+                    i * mazeBuilder.getCellDimension(), mazeCanvas.getHeight());
     }
 
-    private void drawCell(Cell cell, Coordinate coordinate) {
+    private void drawCell(CellBuilder cellBuilder, CoordinateBuilder coordinateBuilder) {
         graphicsContext.setLineWidth(lineWidth);
 
-        setProperWallStrokeColor(cell, "top");
-        graphicsContext.strokeLine(coordinate.x * maze.cellDimension + lineWidth,
-                coordinate.y * maze.cellDimension,
-                (coordinate.x + 1) * maze.cellDimension - lineWidth,
-                coordinate.y * maze.cellDimension);
+        setProperWallStrokeColor(cellBuilder, "top");
+        graphicsContext.strokeLine(coordinateBuilder.x * mazeBuilder.getCellDimension() + lineWidth,
+                coordinateBuilder.y * mazeBuilder.getCellDimension(),
+                (coordinateBuilder.x + 1) * mazeBuilder.getCellDimension() - lineWidth,
+                coordinateBuilder.y * mazeBuilder.getCellDimension());
 
-        setProperWallStrokeColor(cell, "bottom");
-        graphicsContext.strokeLine(coordinate.x * maze.cellDimension + lineWidth,
-                (coordinate.y + 1) * maze.cellDimension,
-                (coordinate.x + 1) * maze.cellDimension - lineWidth,
-                (coordinate.y + 1) * maze.cellDimension);
+        setProperWallStrokeColor(cellBuilder, "bottom");
+        graphicsContext.strokeLine(coordinateBuilder.x * mazeBuilder.getCellDimension() + lineWidth,
+                (coordinateBuilder.y + 1) * mazeBuilder.getCellDimension(),
+                (coordinateBuilder.x + 1) * mazeBuilder.getCellDimension() - lineWidth,
+                (coordinateBuilder.y + 1) * mazeBuilder.getCellDimension());
 
-        setProperWallStrokeColor(cell, "left");
-        graphicsContext.strokeLine(coordinate.x * maze.cellDimension,
-                coordinate.y * maze.cellDimension + lineWidth,
-                coordinate.x * maze.cellDimension,
-                (coordinate.y + 1) * maze.cellDimension - lineWidth);
+        setProperWallStrokeColor(cellBuilder, "left");
+        graphicsContext.strokeLine(coordinateBuilder.x * mazeBuilder.getCellDimension(),
+                coordinateBuilder.y * mazeBuilder.getCellDimension() + lineWidth,
+                coordinateBuilder.x * mazeBuilder.getCellDimension(),
+                (coordinateBuilder.y + 1) * mazeBuilder.getCellDimension() - lineWidth);
 
-        setProperWallStrokeColor(cell, "right");
-        graphicsContext.strokeLine((coordinate.x + 1) * maze.cellDimension,
-                coordinate.y * maze.cellDimension + lineWidth,
-                (coordinate.x + 1) * maze.cellDimension,
-                (coordinate.y + 1) * maze.cellDimension - lineWidth);
+        setProperWallStrokeColor(cellBuilder, "right");
+        graphicsContext.strokeLine((coordinateBuilder.x + 1) * mazeBuilder.getCellDimension(),
+                coordinateBuilder.y * mazeBuilder.getCellDimension() + lineWidth,
+                (coordinateBuilder.x + 1) * mazeBuilder.getCellDimension(),
+                (coordinateBuilder.y + 1) * mazeBuilder.getCellDimension() - lineWidth);
 
-        setProperCellFillColor(cell);
-        graphicsContext.fillRect(coordinate.x * maze.cellDimension + 2.5,
-                coordinate.y * maze.cellDimension + 2.5,
-                maze.cellDimension - 5,
-                maze.cellDimension - 5);
+        setProperCellFillColor(cellBuilder);
+        graphicsContext.fillRect(coordinateBuilder.x * mazeBuilder.getCellDimension() + 2.5,
+                coordinateBuilder.y * mazeBuilder.getCellDimension() + 2.5,
+                mazeBuilder.getCellDimension() - 5,
+                mazeBuilder.getCellDimension() - 5);
     }
 
     private Boolean onCurrent = false;
 
-    private void setProperCellFillColor(Cell cell) {
+    private void setProperCellFillColor(CellBuilder cellBuilder) {
         if (onCurrent)
             graphicsContext.setFill(Color.valueOf("#cafa8c"));
-        else if (cell.isFinished())
+        else if (cellBuilder.isFinished())
             graphicsContext.setFill(Color.valueOf("#5ee2a7"));
-        else if (cell.isVisited()) {
+        else if (cellBuilder.isVisited()) {
             graphicsContext.setFill(Color.valueOf("#e2a65e"));
         } else {
             graphicsContext.setFill(Color.valueOf("#2f8daf"));
         }
     }
 
-    private void setProperWallStrokeColor(Cell cell, String wall) {
-        if (cell.wallExists(wall))
+    private void setProperWallStrokeColor(CellBuilder cellBuilder, String wall) {
+        if (cellBuilder.wallExists(wall))
             graphicsContext.setStroke(Color.valueOf("#3e3553"));
-        else if (cell.isFinished()) {
+        else if (cellBuilder.isFinished()) {
             graphicsContext.setStroke(Color.valueOf("#5ee2a7"));
         } else {
             graphicsContext.setStroke(Color.valueOf("#e2a65e"));
@@ -202,12 +236,12 @@ public class GenerateMazeController {
     private void removeWallBetween(int fromX, int fromY, int toX, int toY) {
 
         if (fromX == toX && fromY + 1 == toY) {
-            maze.cells[fromX][fromY].removeWall("bottom");
-            maze.cells[toX][toY].removeWall("top");
+            mazeBuilder.getCellBuilders()[fromX][fromY].removeWall("bottom");
+            mazeBuilder.getCellBuilders()[toX][toY].removeWall("top");
         }
         if (fromY == toY && fromX + 1 == toX) {
-            maze.cells[fromX][fromY].removeWall("right");
-            maze.cells[toX][toY].removeWall("left");
+            mazeBuilder.getCellBuilders()[fromX][fromY].removeWall("right");
+            mazeBuilder.getCellBuilders()[toX][toY].removeWall("left");
         }
         if (fromX == toX && toY + 1 == fromY)
             removeWallBetween(toX, toY, fromX, fromY);

@@ -23,7 +23,7 @@
                      <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back" />
                      <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" text="Generate">
                         <graphic>
-                           <TextField fx:id="cellDimensionTextArea" promptText="cell dimension" />
+                           <TextField fx:id="cellDimensionTextArea" promptText="cellBuilder dimension" />
                         </graphic>
                      </Button>
                      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
