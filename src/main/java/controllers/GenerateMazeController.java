@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -15,11 +16,7 @@ import mazebuilders.CellBuilder;
 import mazebuilders.CoordinateBuilder;
 import mazebuilders.MazeBuilder;
 import scenes.MenuScene;
-import xmlmodels.Cell;
-import xmlmodels.Coordinate;
 import xmlmodels.Maze;
-import xmlmodels.Walls;
-
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +24,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GenerateMazeController {
+
+    private final double ANIMATION_INTER_PAUSE_TIME;
 
     @FXML
     private Canvas mazeCanvas;
@@ -43,6 +42,9 @@ public class GenerateMazeController {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private ComboBox modeComboBox;
+
     private MazeBuilder mazeBuilder;
     private GraphicsContext graphicsContext;
     private double lineWidth;
@@ -50,12 +52,17 @@ public class GenerateMazeController {
 
     public GenerateMazeController() {
         this.lineWidth = 5;
+        ANIMATION_INTER_PAUSE_TIME = 0.0625;
         mazeBuilder = null;
         wasRun = new AtomicBoolean(false);
     }
+
     @FXML
     public void initialize(){
         graphicsContext = mazeCanvas.getGraphicsContext2D();
+
+        modeComboBox.getItems().addAll("classic", "combat", "timer");
+        modeComboBox.setValue("classic");
     }
 
     @FXML
@@ -84,14 +91,21 @@ public class GenerateMazeController {
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
             int mazeId = getValidMazeId();
-            Maze maze = new Maze(mazeId,mazeBuilder);
+            String mode = getMode();
+            Maze maze = new Maze(mazeId, mode, mazeBuilder);
 
-            jaxbMarshaller.marshal(maze, new File("src/main/resources/mazes/classic_" + mazeId + ".xml"));
+            String filename = mode + "_" + mazeId + ".xml";
+            jaxbMarshaller.marshal(maze, new File("src/main/resources/mazes/" + filename));
 
         } catch (jakarta.xml.bind.JAXBException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private String getMode() {
+        String mode = (String) modeComboBox.getValue();
+        return mode;
     }
 
     private int getValidMazeId() {
@@ -128,7 +142,7 @@ public class GenerateMazeController {
                 cellsStack.remove(cellsStack.size() - 1);
             }
 
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime += 0.0625));
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(pauseTime += ANIMATION_INTER_PAUSE_TIME));
             MazeBuilder finalMazeBuilder = new MazeBuilder(mazeBuilder);
             pauseTransition.setOnFinished(event -> drawMaze(finalMazeBuilder));
             pauseTransition.play();

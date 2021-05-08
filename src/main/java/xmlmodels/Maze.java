@@ -9,6 +9,9 @@ public class Maze {
     @XmlAttribute
     private int id;
 
+    @XmlAttribute
+    private String mode;
+
     @XmlElement(name = "width")
     private int width;
 
@@ -25,8 +28,9 @@ public class Maze {
     @XmlElement(name ="items")
     private Cell[][] cells;
 
-    public Maze(int id, MazeBuilder mazeBuilder) {
+    public Maze(int id, String mode, MazeBuilder mazeBuilder) {
         this.id = id;
+        this.mode = mode;
         this.width = mazeBuilder.getWidth();
         this.height = mazeBuilder.getHeight();
         this.start = new Coordinate(mazeBuilder.getStart());
