@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,12 +30,15 @@ public class PlayController {
 
         lastCoordinate = mazeBuilder.getStart();
         drawPlayer();
+
+        mazeCanvas.getScene().addEventHandler(KeyEvent.ANY, keyEvent -> move(keyEvent));
     }
 
     private MazeBuilder mazeBuilder;
 
     private void drawPlayer() {
         graphicsContext.setFill(Color.GREEN);
+        System.out.println(lastCoordinate.x + " " + lastCoordinate.y);
         graphicsContext.fillRect(
                 lastCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
                 lastCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
@@ -121,25 +125,62 @@ public class PlayController {
 
     @FXML
     void move(KeyEvent event) {
-        var key = event.getCharacter();
-        switch( (int)key.charAt(0) ) {
-            case 37 :
-                // handle left
+        var keyCode = event.getCode();
+        switch( keyCode ) {
+            case LEFT :
+                moveLeft();
                 break;
-            case 38 :
+            case UP :
                 moveUp();
                 break;
-            case 39 :
-                // handle right
+            case RIGHT :
+                moveRight();
                 break;
-            case 40 :
-                // handle down
+            case DOWN :
+                moveDown();
                 break;
         }
     }
 
+    private void moveDown() {
+        Boolean canMove = !mazeBuilder
+                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .wallExists("bottom");
+        if (canMove){
+            lastCoordinate.y++;
+            drawPlayer();
+        }
+    }
+
+    private void moveRight() {
+        Boolean canMove = !mazeBuilder
+                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .wallExists("right");
+        if (canMove){
+            lastCoordinate.x++;
+            drawPlayer();
+        }
+    }
+
+    private void moveLeft() {
+        Boolean canMove = !mazeBuilder
+                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .wallExists("left");
+
+        if (canMove){
+            lastCoordinate.x--;
+            drawPlayer();
+        }
+    }
+
     private void moveUp() {
-        lastCoordinate.y--;
-        drawPlayer();
+        Boolean canMove = !mazeBuilder
+                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .wallExists("top");
+
+        if (canMove){
+            lastCoordinate.y--;
+            drawPlayer();
+        }
     }
 }
