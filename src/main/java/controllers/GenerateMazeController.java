@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -17,6 +16,7 @@ import mazebuilders.CoordinateBuilder;
 import mazebuilders.MazeBuilder;
 import scenes.MenuScene;
 import xmlmodels.Maze;
+
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
@@ -31,23 +31,17 @@ public class GenerateMazeController {
     private Canvas mazeCanvas;
 
     @FXML
-    private Button generateButton;
-
-    @FXML
     private TextField cellDimensionTextArea;
 
     @FXML
     private Button backButton;
 
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private ComboBox modeComboBox;
-
     private MazeBuilder mazeBuilder;
+
     private GraphicsContext graphicsContext;
+
     private double lineWidth;
+
     AtomicBoolean wasRun;
 
     public GenerateMazeController() {
@@ -60,9 +54,6 @@ public class GenerateMazeController {
     @FXML
     public void initialize(){
         graphicsContext = mazeCanvas.getGraphicsContext2D();
-
-        modeComboBox.getItems().addAll("classic", "combat", "timer");
-        modeComboBox.setValue("classic");
     }
 
     @FXML
@@ -94,23 +85,23 @@ public class GenerateMazeController {
             String mode = getMode();
             Maze maze = new Maze(mazeId, mode, mazeBuilder);
 
-            String filename = mode + "_" + mazeId + ".xml";
+            String filename = "Level" + "_" + mazeId + ".xml";
             jaxbMarshaller.marshal(maze, new File("src/main/resources/mazes/" + filename));
 
         } catch (jakarta.xml.bind.JAXBException e) {
             e.printStackTrace();
         }
-
     }
 
     private String getMode() {
-        String mode = (String) modeComboBox.getValue();
-        return mode;
+        // TODO
+        return "classic";
     }
 
     private int getValidMazeId() {
-        // TODO
-        return 1;
+        File directory=new File("src/main/resources/mazes/");
+        int fileCount=directory.list().length;
+        return fileCount+1;
     }
 
     @FXML

@@ -4,7 +4,6 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -14,7 +13,7 @@
 <Scene stylesheets="@../stylesheets/generateMaze.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
     <AnchorPane prefHeight="828.0" prefWidth="1485.0">
       <children>
-         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
                <Canvas fx:id="mazeCanvas" height="600.0" opacity="0.8" width="800.0" BorderPane.alignment="CENTER" />
             </center>
@@ -27,10 +26,7 @@
                            <TextField fx:id="cellDimensionTextArea" prefHeight="57.0" prefWidth="228.0" promptText="cell dimension" />
                         </graphic>
                      </Button>
-                     <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" prefHeight="78.0" prefWidth="326.0" text="Save">
-                        <graphic>
-                           <ComboBox fx:id="modeComboBox" prefHeight="57.0" prefWidth="200.0" promptText="classic" />
-                        </graphic></Button>
+                     <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
                   </children>
                </HBox>
             </bottom>

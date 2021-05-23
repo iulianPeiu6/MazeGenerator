@@ -1,5 +1,7 @@
 package mazebuilders;
 
+import xmlmodels.Cell;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,16 @@ public class CellBuilder {
         this.walls = Arrays.asList(true, true, true, true);
         this.visited = false;
         this.finished = false;
+    }
+
+    public CellBuilder(List<Boolean> walls) {
+        this.walls = walls;
+        this.visited = true;
+        this.finished = true;
+    }
+
+    public CellBuilder(Cell cell) {
+        this.walls = cell.getWalls().asList();
     }
 
     public CellBuilder(CellBuilder cellBuilder) {

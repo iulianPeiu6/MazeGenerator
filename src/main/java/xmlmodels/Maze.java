@@ -3,6 +3,8 @@ package xmlmodels;
 import jakarta.xml.bind.annotation.*;
 import mazebuilders.MazeBuilder;
 
+import java.util.Arrays;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Maze {
@@ -44,5 +46,38 @@ public class Maze {
     }
 
     public Maze() {
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Coordinate getStart() {
+        return start;
+    }
+
+    public int getCellDimension() {
+        return cellDimension;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    @Override
+    public String toString() {
+        return "Maze{" +
+                "id=" + id +
+                ", mode='" + mode + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", start=" + start +
+                ", cellDimension=" + cellDimension +
+                ", cells=" + Arrays.toString(cells) +
+                '}';
     }
 }

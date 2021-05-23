@@ -1,5 +1,7 @@
 package mazebuilders;
 
+import xmlmodels.Maze;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,17 @@ public class MazeBuilder {
         for (int i=0; i<width;i++)
             for (int j=0; j<height; j++)
                 this.cellBuilders[i][j] = new CellBuilder();
+    }
+
+    public MazeBuilder(Maze maze){
+        width = maze.getWidth();
+        height = maze.getHeight();
+        cellDimension = maze.getCellDimension();
+        cellBuilders = new CellBuilder[width][height];
+        start = maze.getStart().getCoordinate();
+        for (int i=0; i<width;i++)
+            for (int j=0; j<height; j++)
+                this.cellBuilders[i][j] = new CellBuilder(maze.getCells()[i][j].getWalls().asList());
     }
 
     public MazeBuilder(MazeBuilder mazeBuilder){

@@ -2,11 +2,10 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import scenes.GenerateMazeScene;
-import scenes.PlayModeScene;
+import scenes.ShowLevelsScene;
 
 public class MenuController {
 
@@ -46,7 +45,7 @@ public class MenuController {
         Stage playModeStage = new Stage();
         playModeStage.setMaximized(true);
         playModeStage.setTitle("Play Mode");
-        playModeStage.setScene(PlayModeScene.getScene());
+        playModeStage.setScene(new ShowLevelsScene().getScene());
         playModeStage.show();
     }
 

@@ -2,6 +2,7 @@ package xmlmodels;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Walls {
@@ -26,4 +27,10 @@ public class Walls {
 
     public Walls() {
     }
+
+    public List<Boolean> asList() {
+        return Arrays.asList(top, right, bottom, left);
+    }
+
+
 }
