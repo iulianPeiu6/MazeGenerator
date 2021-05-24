@@ -7,13 +7,15 @@ import java.util.List;
 
 public class MazeBuilder {
 
-    private Integer width, height;
+    private final Integer width;
+    private final Integer height;
 
-    private Integer cellDimension;
+    private final Integer cellDimension;
 
-    private CellBuilder[][] cellBuilders;
+    private final CellBuilder[][] cellBuilders;
 
-    private CoordinateBuilder start, current;
+    private CoordinateBuilder start;
+    private CoordinateBuilder current;
 
     public MazeBuilder(int width, int height, int cellDimension) {
         this.width = width/cellDimension;
@@ -37,23 +39,15 @@ public class MazeBuilder {
     }
 
     public MazeBuilder(MazeBuilder mazeBuilder){
-        this.width = Integer.valueOf(mazeBuilder.width);
-        this.height = Integer.valueOf(mazeBuilder.height);
-        this.cellDimension = Integer.valueOf(mazeBuilder.cellDimension);
+        this.width = mazeBuilder.width;
+        this.height = mazeBuilder.height;
+        this.cellDimension = mazeBuilder.cellDimension;
         this.cellBuilders = new CellBuilder[width][height];
         for (int i=0; i< width;i++)
             for (int j=0; j< height; j++)
                 this.cellBuilders[i][j] = new CellBuilder(mazeBuilder.cellBuilders[i][j]);
         this.start = new CoordinateBuilder(mazeBuilder.start);
         this.current = new CoordinateBuilder(mazeBuilder.current);
-    }
-
-    public Boolean existsUnvisitedCells(){
-        for (int i=0; i<width;i++)
-            for (int j=0; j<height; j++)
-                if (!cellBuilders[i][j].isVisited())
-                    return true;
-        return false;
     }
 
     public void setVisitedCell(CoordinateBuilder coordinateBuilder){
@@ -88,9 +82,7 @@ public class MazeBuilder {
     private boolean validNeighbour(int x, int y) {
         if (x<0 || y<0)
             return false;
-        if (x>=width || y>=height)
-            return false;
-        return true;
+        return x < width && y < height;
     }
 
     public CoordinateBuilder getStart() {
@@ -114,31 +106,15 @@ public class MazeBuilder {
         return width;
     }
 
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
     public Integer getHeight() {
         return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
     }
 
     public Integer getCellDimension() {
         return cellDimension;
     }
 
-    public void setCellDimension(Integer cellDimension) {
-        this.cellDimension = cellDimension;
-    }
-
     public CellBuilder[][] getCellBuilders() {
         return cellBuilders;
-    }
-
-    public void setCellBuilders(CellBuilder[][] cellBuilders) {
-        this.cellBuilders = cellBuilders;
     }
 }

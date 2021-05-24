@@ -6,13 +6,16 @@ import mazebuilders.MazeBuilder;
 import java.util.Arrays;
 
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType (XmlAccessType.NONE)
 public class Maze {
     @XmlAttribute
     private int id;
 
-    @XmlAttribute
+    @XmlAttribute(name = "mode")
     private String mode;
+
+    @XmlAttribute(name = "completed")
+    private String completed;
 
     @XmlElement(name = "width")
     private int width;
@@ -43,6 +46,8 @@ public class Maze {
             for (int j=0;j<height;j++)
                 cells[i][j] = new Cell(new Coordinate(i,j),
                         new Walls(mazeBuilder.getCellBuilders()[i][j].walls));
+
+        this.completed = "no";
     }
 
     public Maze() {
@@ -66,6 +71,18 @@ public class Maze {
 
     public Cell[][] getCells() {
         return cells;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(String completed) {
+        this.completed = completed;
     }
 
     @Override

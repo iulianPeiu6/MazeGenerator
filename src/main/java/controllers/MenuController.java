@@ -10,22 +10,16 @@ import scenes.ShowLevelsScene;
 public class MenuController {
 
     @FXML
-    private Button playButton;
-
-    @FXML
     private Button generateButton;
 
     @FXML
-    private Button exitButton;
-
-    @FXML
-    public void exitButtonPressed(ActionEvent event) {
+    public void exitButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.close();
     }
 
     @FXML
-    public void generateButtonPressed(ActionEvent event) {
+    public void generateButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.hide();
 
@@ -38,7 +32,7 @@ public class MenuController {
     }
 
     @FXML
-    public void playButtonPressed(ActionEvent event) {
+    public void playButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.hide();
 

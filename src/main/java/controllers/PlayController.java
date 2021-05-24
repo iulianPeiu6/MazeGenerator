@@ -1,10 +1,13 @@
 package controllers;
 
+import jakarta.xml.bind.JAXBContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -13,6 +16,10 @@ import mazebuilders.CoordinateBuilder;
 import mazebuilders.MazeBuilder;
 import scenes.PlayScene;
 import scenes.ShowLevelsScene;
+import xmlmodels.Maze;
+
+import javax.xml.bind.Marshaller;
+import java.io.File;
 
 public class PlayController {
 
@@ -21,30 +28,56 @@ public class PlayController {
 
     private GraphicsContext graphicsContext;
 
-    private CoordinateBuilder lastCoordinate;
+    private CoordinateBuilder currentCoordinate, finish;
 
     @FXML
     public void initialize(){
         graphicsContext = mazeCanvas.getGraphicsContext2D();
         drawMaze();
 
-        lastCoordinate = mazeBuilder.getStart();
+        currentCoordinate =  mazeBuilder.getStart();
+
+        finish = new CoordinateBuilder();
+        finish.x = (int) (Math.random() * mazeBuilder.getWidth());
+        finish.y = (int) (Math.random() * mazeBuilder.getHeight());
+        drawFinish();
+
+        graphicsContext.setFill(Color.GREEN);
         drawPlayer();
 
-        mazeCanvas.getScene().addEventHandler(KeyEvent.ANY, keyEvent -> move(keyEvent));
+        mazeCanvas.getScene().addEventHandler(KeyEvent.ANY, this::move);
     }
 
     private MazeBuilder mazeBuilder;
 
-    private void drawPlayer() {
-        graphicsContext.setFill(Color.GREEN);
-        System.out.println(lastCoordinate.x + " " + lastCoordinate.y);
+    private void drawFinish(){
+        graphicsContext.setFill(Color.RED);
         graphicsContext.fillRect(
-                lastCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                lastCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                finish.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                finish.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
                 mazeBuilder.getCellDimension()/2,
                 mazeBuilder.getCellDimension()/2
         );
+
+    }
+
+    private void drawPlayer() {
+        graphicsContext.fillRect(
+                currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                mazeBuilder.getCellDimension()/2,
+                mazeBuilder.getCellDimension()/2
+        );
+        if (currentCoordinate.equals(finish)) {
+            Dialog<String> dialog = new Dialog<String>();
+            dialog.setTitle("");
+            ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+            dialog.setContentText("You won!");
+            dialog.getDialogPane().getButtonTypes().add(type);
+            dialog.showAndWait();
+            reSave();
+            back();
+        }
     }
 
     private void drawMaze() {
@@ -112,7 +145,7 @@ public class PlayController {
     }
 
     @FXML
-    void back(ActionEvent event) {
+    void back() {
         Stage currentStage = (Stage) mazeCanvas.getScene().getWindow();
         currentStage.hide();
 
@@ -144,43 +177,91 @@ public class PlayController {
 
     private void moveDown() {
         Boolean canMove = !mazeBuilder
-                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("bottom");
         if (canMove){
-            lastCoordinate.y++;
+            currentCoordinate.y++;
+                graphicsContext.setFill(Color.GREEN);
+            graphicsContext.fillRect(
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() - mazeBuilder.getCellDimension()/4,
+                    mazeBuilder.getCellDimension()/2,
+                    mazeBuilder.getCellDimension()/2
+            );
             drawPlayer();
         }
+
     }
 
     private void moveRight() {
         Boolean canMove = !mazeBuilder
-                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("right");
         if (canMove){
-            lastCoordinate.x++;
+            currentCoordinate.x++;
+            graphicsContext.fillRect(
+                    currentCoordinate.x * mazeBuilder.getCellDimension() - mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                    mazeBuilder.getCellDimension()/2,
+                    mazeBuilder.getCellDimension()/2
+            );
             drawPlayer();
         }
     }
 
     private void moveLeft() {
         Boolean canMove = !mazeBuilder
-                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("left");
 
         if (canMove){
-            lastCoordinate.x--;
+            currentCoordinate.x--;
+            graphicsContext.fillRect(
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + 3*mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                    mazeBuilder.getCellDimension()/2,
+                    mazeBuilder.getCellDimension()/2
+            );
             drawPlayer();
         }
     }
 
     private void moveUp() {
         Boolean canMove = !mazeBuilder
-                .getCellBuilders()[lastCoordinate.x][lastCoordinate.y]
+                .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("top");
 
         if (canMove){
-            lastCoordinate.y--;
+            currentCoordinate.y--;
+
+            graphicsContext.fillRect(
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + 3*mazeBuilder.getCellDimension()/4,
+                    mazeBuilder.getCellDimension()/2,
+                    mazeBuilder.getCellDimension()/2
+            );
             drawPlayer();
+        }
+    }
+
+    public void reSave() {
+        if (mazeBuilder == null)
+            return ;
+        JAXBContext jaxbContext = null;
+        try {
+            jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
+                    .createContext(new Class[]{Maze.class}, null);
+
+            var jaxbMarshaller = jaxbContext.createMarshaller();
+
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            PlayScene.maze.setCompleted("yes");
+            String filename = "Level" + "_" + PlayScene.maze.getId() + ".xml";
+            jaxbMarshaller.marshal(PlayScene.maze, new File("src/main/resources/mazes/" + filename));
+
+        } catch (jakarta.xml.bind.JAXBException e) {
+            e.printStackTrace();
         }
     }
 }

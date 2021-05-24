@@ -2,7 +2,6 @@ package controllers;
 
 import jakarta.xml.bind.JAXBContext;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,6 +20,7 @@ import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GenerateMazeController {
@@ -40,7 +40,7 @@ public class GenerateMazeController {
 
     private GraphicsContext graphicsContext;
 
-    private double lineWidth;
+    private final double lineWidth;
 
     AtomicBoolean wasRun;
 
@@ -57,7 +57,7 @@ public class GenerateMazeController {
     }
 
     @FXML
-    public void back(ActionEvent event) {
+    public void back() {
         Stage currentStage = (Stage) backButton.getScene().getWindow();
         currentStage.hide();
 
@@ -69,10 +69,10 @@ public class GenerateMazeController {
     }
 
     @FXML
-    public void save(ActionEvent event) {
+    public void save() {
         if (mazeBuilder == null)
             return ;
-        JAXBContext jaxbContext = null;
+        JAXBContext jaxbContext;
         try {
             jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
                     .createContext(new Class[]{Maze.class}, null);
@@ -100,7 +100,7 @@ public class GenerateMazeController {
 
     private int getValidMazeId() {
         File directory=new File("src/main/resources/mazes/");
-        int fileCount=directory.list().length;
+        int fileCount= Objects.requireNonNull(directory.list()).length;
         return fileCount+1;
     }
 
@@ -158,10 +158,8 @@ public class GenerateMazeController {
         drawMazeSkeleton(mazeBuilder);
         for (int i = 0; i < mazeBuilder.getWidth(); i++)
             for (int j = 0; j < mazeBuilder.getHeight(); j++){
-                if (mazeBuilder.getCurrent().x == i && mazeBuilder.getCurrent().y == j)
-                    onCurrent = true;
-                else
-                    onCurrent = false;
+                onCurrent = mazeBuilder.getCurrent().x == i
+                        && mazeBuilder.getCurrent().y == j;
                 drawCell(mazeBuilder.getCellBuilders()[i][j], new CoordinateBuilder(i, j));
             }
     }
