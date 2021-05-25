@@ -17,10 +17,16 @@ public class CellBuilder {
         this.finished = false;
     }
 
+    public CellBuilder(List<Boolean> walls) {
+        this.walls = walls;
+        this.visited = true;
+        this.finished = true;
+    }
+
     public CellBuilder(CellBuilder cellBuilder) {
         this.walls = new ArrayList<>(cellBuilder.walls);
-        this.visited = Boolean.valueOf(cellBuilder.visited);
-        this.finished = Boolean.valueOf(cellBuilder.finished);
+        this.visited = cellBuilder.visited;
+        this.finished = cellBuilder.finished;
     }
 
     public void removeWall(String wall) {

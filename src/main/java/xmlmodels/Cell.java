@@ -18,4 +18,12 @@ public class Cell {
 
     public Cell() {
     }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public Walls getWalls() {
+        return walls;
+    }
 }

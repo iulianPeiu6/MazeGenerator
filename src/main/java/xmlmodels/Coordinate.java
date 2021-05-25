@@ -24,4 +24,8 @@ public class Coordinate {
         this.x = x;
         this.y = y;
     }
+
+    public CoordinateBuilder getCoordinate(){
+        return new CoordinateBuilder(x,y);
+    }
 }

@@ -1,32 +1,24 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import scenes.GenerateMazeScene;
-import scenes.PlayModeScene;
+import scenes.ShowLevelsScene;
 
 public class MenuController {
-
-    @FXML
-    private Button playButton;
 
     @FXML
     private Button generateButton;
 
     @FXML
-    private Button exitButton;
-
-    @FXML
-    public void exitButtonPressed(ActionEvent event) {
+    public void exitButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.close();
     }
 
     @FXML
-    public void generateButtonPressed(ActionEvent event) {
+    public void generateButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.hide();
 
@@ -39,14 +31,14 @@ public class MenuController {
     }
 
     @FXML
-    public void playButtonPressed(ActionEvent event) {
+    public void playButtonPressed() {
         Stage currentStage = (Stage) generateButton.getScene().getWindow();
         currentStage.hide();
 
         Stage playModeStage = new Stage();
         playModeStage.setMaximized(true);
         playModeStage.setTitle("Play Mode");
-        playModeStage.setScene(PlayModeScene.getScene());
+        playModeStage.setScene(new ShowLevelsScene().getScene());
         playModeStage.show();
     }
 

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 
 <Scene stylesheets="@../stylesheets/generateMaze.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GenerateMazeController">
-    <AnchorPane prefHeight="200" prefWidth="200">
+    <AnchorPane prefHeight="828.0" prefWidth="1485.0">
       <children>
-         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
                <Canvas fx:id="mazeCanvas" height="600.0" opacity="0.8" width="800.0" BorderPane.alignment="CENTER" />
             </center>
@@ -21,9 +21,9 @@
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" BorderPane.alignment="CENTER">
                   <children>
                      <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Back" />
-                     <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" text="Generate">
+                     <Button fx:id="generateButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateMaze" prefHeight="78.0" prefWidth="397.0" text="Generate">
                         <graphic>
-                           <TextField fx:id="cellDimensionTextArea" promptText="cellBuilder dimension" />
+                           <TextField fx:id="cellDimensionTextArea" prefHeight="57.0" prefWidth="228.0" promptText="cell dimension" />
                         </graphic>
                      </Button>
                      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maze id="1">
+<maze id="2" mode="classic" completed="yes">
    <width>8</width>
    <height>6</height>
-   <start x="7" y="5"/>
+   <start x="0" y="4"/>
    <cell_dimension>100</cell_dimension>
    <cells>
       <items>
          <item>
             <coordinate x="0" y="0"/>
-            <walls top="true" right="false" bottom="false" left="true"/>
+            <walls top="true" right="false" bottom="true" left="true"/>
          </item>
          <item>
             <coordinate x="0" y="1"/>
-            <walls top="false" right="true" bottom="false" left="true"/>
+            <walls top="true" right="false" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="0" y="2"/>
@@ -24,11 +24,11 @@
          </item>
          <item>
             <coordinate x="0" y="4"/>
-            <walls top="false" right="true" bottom="false" left="true"/>
+            <walls top="false" right="true" bottom="true" left="true"/>
          </item>
          <item>
             <coordinate x="0" y="5"/>
-            <walls top="false" right="false" bottom="true" left="true"/>
+            <walls top="true" right="false" bottom="true" left="true"/>
          </item>
       </items>
       <items>
@@ -38,19 +38,19 @@
          </item>
          <item>
             <coordinate x="1" y="1"/>
-            <walls top="true" right="false" bottom="false" left="true"/>
+            <walls top="true" right="false" bottom="true" left="false"/>
          </item>
          <item>
             <coordinate x="1" y="2"/>
-            <walls top="false" right="true" bottom="false" left="true"/>
+            <walls top="true" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="1" y="3"/>
-            <walls top="false" right="true" bottom="true" left="true"/>
+            <walls top="false" right="false" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="1" y="4"/>
-            <walls top="true" right="false" bottom="false" left="true"/>
+            <walls top="false" right="false" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="1" y="5"/>
@@ -68,11 +68,11 @@
          </item>
          <item>
             <coordinate x="2" y="2"/>
-            <walls top="false" right="false" bottom="false" left="true"/>
+            <walls top="false" right="false" bottom="true" left="true"/>
          </item>
          <item>
             <coordinate x="2" y="3"/>
-            <walls top="false" right="false" bottom="true" left="true"/>
+            <walls top="true" right="true" bottom="true" left="false"/>
          </item>
          <item>
             <coordinate x="2" y="4"/>
@@ -94,19 +94,19 @@
          </item>
          <item>
             <coordinate x="3" y="2"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="true" right="true" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="3" y="3"/>
-            <walls top="true" right="false" bottom="false" left="false"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="3" y="4"/>
-            <walls top="false" right="true" bottom="true" left="true"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="3" y="5"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="false" bottom="true" left="false"/>
          </item>
       </items>
       <items>
@@ -116,85 +116,85 @@
          </item>
          <item>
             <coordinate x="4" y="1"/>
-            <walls top="false" right="true" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="4" y="2"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="true" left="true"/>
          </item>
          <item>
             <coordinate x="4" y="3"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
-         </item>
-         <item>
-            <coordinate x="4" y="4"/>
             <walls top="true" right="false" bottom="false" left="true"/>
          </item>
          <item>
+            <coordinate x="4" y="4"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
+         </item>
+         <item>
             <coordinate x="4" y="5"/>
-            <walls top="false" right="false" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="true" left="false"/>
          </item>
       </items>
       <items>
          <item>
             <coordinate x="5" y="0"/>
-            <walls top="true" right="true" bottom="false" left="false"/>
+            <walls top="true" right="false" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="5" y="1"/>
-            <walls top="false" right="false" bottom="true" left="true"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="5" y="2"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="false" bottom="true" left="true"/>
          </item>
          <item>
             <coordinate x="5" y="3"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="true" right="true" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="5" y="4"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="5" y="5"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="false" bottom="true" left="true"/>
          </item>
       </items>
       <items>
          <item>
             <coordinate x="6" y="0"/>
-            <walls top="true" right="false" bottom="true" left="true"/>
+            <walls top="true" right="false" bottom="true" left="false"/>
          </item>
          <item>
             <coordinate x="6" y="1"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="true" right="false" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="6" y="2"/>
-            <walls top="true" right="true" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="true" left="false"/>
          </item>
          <item>
             <coordinate x="6" y="3"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="true" right="false" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="6" y="4"/>
-            <walls top="true" right="false" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="6" y="5"/>
-            <walls top="true" right="true" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="true" left="false"/>
          </item>
       </items>
       <items>
          <item>
             <coordinate x="7" y="0"/>
-            <walls top="true" right="true" bottom="false" left="false"/>
+            <walls top="true" right="true" bottom="true" left="false"/>
          </item>
          <item>
             <coordinate x="7" y="1"/>
-            <walls top="false" right="true" bottom="false" left="false"/>
+            <walls top="true" right="true" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="7" y="2"/>
@@ -202,11 +202,11 @@
          </item>
          <item>
             <coordinate x="7" y="3"/>
-            <walls top="false" right="true" bottom="true" left="false"/>
+            <walls top="false" right="true" bottom="false" left="false"/>
          </item>
          <item>
             <coordinate x="7" y="4"/>
-            <walls top="true" right="true" bottom="false" left="false"/>
+            <walls top="false" right="true" bottom="false" left="true"/>
          </item>
          <item>
             <coordinate x="7" y="5"/>
