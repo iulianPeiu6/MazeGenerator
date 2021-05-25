@@ -57,41 +57,24 @@ public class PlayController {
 
     private MazeBuilder mazeBuilder;
 
-    private void drawFinish(){
-        graphicsContext.setFill(Color.RED);
-        graphicsContext.fillRect(
-                finish.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
-                finish.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
-                (double)mazeBuilder.getCellDimension()/2,
-                (double)mazeBuilder.getCellDimension()/2
-        );
+    public void reSave() {
+        if (mazeBuilder == null)
+            return ;
+        JAXBContext jaxbContext;
+        try {
+            jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
+                    .createContext(new Class[]{Maze.class}, null);
 
-    }
+            var jaxbMarshaller = jaxbContext.createMarshaller();
 
-    private void drawPlayer() {
-        path.add(new CoordinateBuilder(currentCoordinate));
-        if (path.size()-2 > 0) {
-            if (currentCoordinate.equals(path.get(path.size() - 3))) {
-                path.remove(path.size() - 2);
-                path.remove(path.size() - 1);
-            }
-        }
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-        graphicsContext.fillRect(
-                currentCoordinate.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
-                currentCoordinate.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
-                (double)mazeBuilder.getCellDimension()/2,
-                (double)mazeBuilder.getCellDimension()/2
-        );
-        if (currentCoordinate.equals(finish)) {
-            Dialog<String> dialog = new Dialog<>();
-            dialog.setTitle("");
-            ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
-            dialog.setContentText("You won!");
-            dialog.getDialogPane().getButtonTypes().add(type);
-            dialog.showAndWait();
-            reSave();
-            back();
+            PlayScene.maze.setCompleted("yes");
+            String filename = "Level" + "_" + PlayScene.maze.getId() + ".xml";
+            jaxbMarshaller.marshal(PlayScene.maze, new File("src/main/resources/mazes/" + filename));
+
+        } catch (jakarta.xml.bind.JAXBException e) {
+            e.printStackTrace();
         }
     }
 
@@ -259,24 +242,83 @@ public class PlayController {
         }
     }
 
-    public void reSave() {
-        if (mazeBuilder == null)
-            return ;
-        JAXBContext jaxbContext;
-        try {
-            jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
-                    .createContext(new Class[]{Maze.class}, null);
+    private void removePathFrom(CoordinateBuilder coord1, CoordinateBuilder coord2) {
+        graphicsContext.setFill(Color.valueOf("#e2a65e"));
+        graphicsContext.fillRect(
+                coord1.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                coord1.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                (double)mazeBuilder.getCellDimension()/2,
+                (double)mazeBuilder.getCellDimension()/2
+        );
 
-            var jaxbMarshaller = jaxbContext.createMarshaller();
+        if (coord1.x == coord2.x && coord1.y == coord2.y+1)
+            graphicsContext.fillRect(
+                    coord1.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    coord1.y * mazeBuilder.getCellDimension() - (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()
+            );
+        if (coord1.x == coord2.x && coord1.y == coord2.y-1)
+            graphicsContext.fillRect(
+                    coord1.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    coord1.y * mazeBuilder.getCellDimension() + (double)3*mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()
+            );
+        if (coord1.x == coord2.x+1 && coord1.y == coord2.y)
+            graphicsContext.fillRect(
+                    coord1.x * mazeBuilder.getCellDimension() - (double)mazeBuilder.getCellDimension()/2,
+                    coord1.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension(),
+                    (double)mazeBuilder.getCellDimension()/2
+            );
+        if (coord1.x == coord2.x-1 && coord1.y == coord2.y)
+            graphicsContext.fillRect(
+                    coord1.x * mazeBuilder.getCellDimension() + (double)3*mazeBuilder.getCellDimension()/4,
+                    coord1.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension(),
+                    (double)mazeBuilder.getCellDimension()/2
+            );
+        graphicsContext.setFill(Color.GREEN);
+    }
 
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+    private void drawFinish(){
+        graphicsContext.setFill(Color.RED);
+        graphicsContext.fillRect(
+                finish.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                finish.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                (double)mazeBuilder.getCellDimension()/2,
+                (double)mazeBuilder.getCellDimension()/2
+        );
 
-            PlayScene.maze.setCompleted("yes");
-            String filename = "Level" + "_" + PlayScene.maze.getId() + ".xml";
-            jaxbMarshaller.marshal(PlayScene.maze, new File("src/main/resources/mazes/" + filename));
+    }
 
-        } catch (jakarta.xml.bind.JAXBException e) {
-            e.printStackTrace();
+    private void drawPlayer() {
+        path.add(new CoordinateBuilder(currentCoordinate));
+        if (path.size()-2 > 0) {
+            if (currentCoordinate.equals(path.get(path.size() - 3))) {
+                removePathFrom(path.get(path.size() - 2), path.get(path.size()-1));
+                path.remove(path.size() - 2);
+                path.remove(path.size() - 1);
+            }
+        }
+
+        graphicsContext.fillRect(
+                currentCoordinate.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                currentCoordinate.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                (double)mazeBuilder.getCellDimension()/2,
+                (double)mazeBuilder.getCellDimension()/2
+        );
+        if (currentCoordinate.equals(finish)) {
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("");
+            ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+            dialog.setContentText("You won!");
+            dialog.getDialogPane().getButtonTypes().add(type);
+            dialog.showAndWait();
+            reSave();
+            back();
         }
     }
+
 }
