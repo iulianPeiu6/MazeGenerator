@@ -1,6 +1,5 @@
 package scenes;
 
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +8,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import xmlmodels.Maze;
 
-import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,7 +16,7 @@ import java.io.IOException;
 
 public class PlayScene {
 
-    private Scene scene;
+    private final Scene scene;
 
     public static Maze maze;
 

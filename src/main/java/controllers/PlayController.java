@@ -1,7 +1,6 @@
 package controllers;
 
 import jakarta.xml.bind.JAXBContext;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,6 +19,8 @@ import xmlmodels.Maze;
 
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayController {
 
@@ -29,6 +30,12 @@ public class PlayController {
     private GraphicsContext graphicsContext;
 
     private CoordinateBuilder currentCoordinate, finish;
+
+    private List<CoordinateBuilder> path;
+
+    public PlayController() {
+        path = new ArrayList<>();
+    }
 
     @FXML
     public void initialize(){
@@ -53,23 +60,31 @@ public class PlayController {
     private void drawFinish(){
         graphicsContext.setFill(Color.RED);
         graphicsContext.fillRect(
-                finish.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                finish.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                mazeBuilder.getCellDimension()/2,
-                mazeBuilder.getCellDimension()/2
+                finish.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                finish.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                (double)mazeBuilder.getCellDimension()/2,
+                (double)mazeBuilder.getCellDimension()/2
         );
 
     }
 
     private void drawPlayer() {
+        path.add(new CoordinateBuilder(currentCoordinate));
+        if (path.size()-2 > 0) {
+            if (currentCoordinate.equals(path.get(path.size() - 3))) {
+                path.remove(path.size() - 2);
+                path.remove(path.size() - 1);
+            }
+        }
+
         graphicsContext.fillRect(
-                currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                mazeBuilder.getCellDimension()/2,
-                mazeBuilder.getCellDimension()/2
+                currentCoordinate.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                currentCoordinate.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                (double)mazeBuilder.getCellDimension()/2,
+                (double)mazeBuilder.getCellDimension()/2
         );
         if (currentCoordinate.equals(finish)) {
-            Dialog<String> dialog = new Dialog<String>();
+            Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("");
             ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             dialog.setContentText("You won!");
@@ -176,17 +191,17 @@ public class PlayController {
     }
 
     private void moveDown() {
-        Boolean canMove = !mazeBuilder
+        boolean canMove = !mazeBuilder
                 .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("bottom");
         if (canMove){
             currentCoordinate.y++;
                 graphicsContext.setFill(Color.GREEN);
             graphicsContext.fillRect(
-                    currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                    currentCoordinate.y * mazeBuilder.getCellDimension() - mazeBuilder.getCellDimension()/4,
-                    mazeBuilder.getCellDimension()/2,
-                    mazeBuilder.getCellDimension()/2
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() - (double)mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()/2
             );
             drawPlayer();
         }
@@ -194,40 +209,40 @@ public class PlayController {
     }
 
     private void moveRight() {
-        Boolean canMove = !mazeBuilder
+        boolean canMove = !mazeBuilder
                 .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("right");
         if (canMove){
             currentCoordinate.x++;
             graphicsContext.fillRect(
-                    currentCoordinate.x * mazeBuilder.getCellDimension() - mazeBuilder.getCellDimension()/4,
-                    currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                    mazeBuilder.getCellDimension()/2,
-                    mazeBuilder.getCellDimension()/2
+                    currentCoordinate.x * mazeBuilder.getCellDimension() - (double)mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()/2
             );
             drawPlayer();
         }
     }
 
     private void moveLeft() {
-        Boolean canMove = !mazeBuilder
+        boolean canMove = !mazeBuilder
                 .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("left");
 
         if (canMove){
             currentCoordinate.x--;
             graphicsContext.fillRect(
-                    currentCoordinate.x * mazeBuilder.getCellDimension() + 3*mazeBuilder.getCellDimension()/4,
-                    currentCoordinate.y * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                    mazeBuilder.getCellDimension()/2,
-                    mazeBuilder.getCellDimension()/2
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + (double)3*mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()/2
             );
             drawPlayer();
         }
     }
 
     private void moveUp() {
-        Boolean canMove = !mazeBuilder
+        boolean canMove = !mazeBuilder
                 .getCellBuilders()[currentCoordinate.x][currentCoordinate.y]
                 .wallExists("top");
 
@@ -235,10 +250,10 @@ public class PlayController {
             currentCoordinate.y--;
 
             graphicsContext.fillRect(
-                    currentCoordinate.x * mazeBuilder.getCellDimension() + mazeBuilder.getCellDimension()/4,
-                    currentCoordinate.y * mazeBuilder.getCellDimension() + 3*mazeBuilder.getCellDimension()/4,
-                    mazeBuilder.getCellDimension()/2,
-                    mazeBuilder.getCellDimension()/2
+                    currentCoordinate.x * mazeBuilder.getCellDimension() + (double)mazeBuilder.getCellDimension()/4,
+                    currentCoordinate.y * mazeBuilder.getCellDimension() + (double)3*mazeBuilder.getCellDimension()/4,
+                    (double)mazeBuilder.getCellDimension()/2,
+                    (double)mazeBuilder.getCellDimension()/2
             );
             drawPlayer();
         }
@@ -247,7 +262,7 @@ public class PlayController {
     public void reSave() {
         if (mazeBuilder == null)
             return ;
-        JAXBContext jaxbContext = null;
+        JAXBContext jaxbContext;
         try {
             jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory
                     .createContext(new Class[]{Maze.class}, null);
